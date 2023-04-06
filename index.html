@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta
+			name="viewport"
+			content="width=
+    , initial-scale=1.0"
+		/>
+		<title>Document</title>
+		<style>
+			/* List numbering */
+			ol {
+				margin-left: -13px;
+				list-style: none;
+				counter-reset: li;
+			}
+
+			li:before {
+				color: #f44336;
+				counter-increment: li;
+				content: counters(li, ".") " ";
+			}
+		</style>
+	</head>
+	<body>
+		<ol class="number-list">
+			<li>Item</li>
+			<li>Item</li>
+			<li>Item</li>
+		</ol>
+
+		<ol class="number-list">
+			<li>BFE.dev</li>
+			<li>
+				JavaScript
+				<ol>
+					<li>TypeScript</li>
+					<li>Quiz</li>
+					<li>
+						Framework
+						<ol>
+							<li>React</li>
+							<li>Vue.js</li>
+						</ol>
+					</li>
+				</ol>
+			</li>
+			<li>CSS</li>
+			<li>System Design</li>
+		</ol>
+
+		<script>
+			const b = [[1], [2, 3], [4, 5]];
+			const a = [[6], [4], [2, 7], [1, 9, 10], [3, 8], [5]];
+			const flattenArray = (arr) => {
+				let result = [];
+
+				arr.forEach((item) => {
+					if (Array.isArray(item)) {
+						result = result.concat(flattenArray(item));
+					} else {
+						result.push(item);
+					}
+				});
+
+				return result;
+			};
+
+			const flattened = flattenArray(a);
+
+			console.log(flattened); //  [[6], [4], [2, 7], [1, 9, 10], [3, 8], [5]];
+
+			//Create a PhoneInput component.
+			const phoneInput = document.querySelector("#phone-input");
+
+			const PhoneNumberInput = () => {
+				const formatNumber = (event) => {
+					const current = event.currentTarget.value
+						.replace(/\D/g, "")
+						.substring(0, 10);
+					event.currentTarget.value =
+						current.length > 6
+							? `(${current.substring(0, 3)}) ${current.substring(
+									3,
+									6
+							  )}-${current.substring(6)}`
+							: current.length > 3
+							? `(${current.substring(0, 3)}) ${current.substring(3)}`
+							: current;
+				};
+
+				return <input type="tel" onChange={formatNumber} />;
+			};
+
+			//binary tree
+			function traverse(root) {
+				if (!root) return [];
+
+				let nodes = {};
+				let minimum = 0,
+					maximum = 0;
+
+				function dfs(node, x, y, parent) {
+					if (!nodes.hasOwnProperty(x)) {
+						nodes[x] = [[node.value, y, parent]];
+					} else {
+						nodes[x].push([node.value, y, parent]);
+					}
+
+					minimum = Math.min(minimum, x);
+					maximum = Math.max(maximum, x);
+
+					if (node.left) {
+						dfs(node.left, x - 1, y + 1, x);
+					}
+					if (node.right) {
+						dfs(node.right, x + 1, y + 1, x);
+					}
+				}
+				dfs(root, 0, 0);
+
+				let res = [];
+				for (let i = minimum; i <= maximum; i++) {
+					nodes[i].sort((n1, n2) => {
+						return n1[1] - n2[1] || n1[2] - n2[2];
+					});
+					res = res.concat(nodes[i].map((e) => e[0]));
+				}
+				return res;
+			}
+		</script>
+	</body>
+</html>
